@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Navbar } from "./components/Navbar"
 
 export default function Home() {
   const [lang, setLang] = useState<"fr" | "en">("fr")
@@ -52,7 +53,7 @@ export default function Home() {
         { num: "02", title: "Choisis un match", desc: "Filtre par ligue et par date pour trouver le match qui t'intéresse." },
         { num: "03", title: "Rejoins le chat", desc: "Discute en temps réel avec les autres fans pendant la partie." },
       ],
-      footer_support: "Centre d'aide",
+      footer_support: "Assistance",
       footer_copy: "© 2025 Ultra Sports Fans — Prediction Expert Inc.",
       not_betting: "⚠️ Ultra Sports Fans n'est pas un site de paris. Plateforme de divertissement sportif uniquement.",
     },
@@ -102,7 +103,7 @@ export default function Home() {
         { num: "02", title: "Pick a game", desc: "Filter by league and date to find the match you want." },
         { num: "03", title: "Join the chat", desc: "Talk in real time with other fans during the game." },
       ],
-      footer_support: "Help Center",
+      footer_support: "Assistance",
       footer_copy: "© 2025 Ultra Sports Fans — Prediction Expert Inc.",
       not_betting: "⚠️ Ultra Sports Fans is not a betting site. Sports entertainment platform only.",
     }
@@ -111,33 +112,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0d0d0d]/90 backdrop-blur-md">
-        <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
-          <span className="text-lg font-bold text-white">
-            Ultra <span className="text-[#39ff14]">Sports Fans</span>
-          </span>
-          <div className="flex items-center gap-4">
-            <a href="/support" className="text-sm text-gray-400 hover:text-white transition-colors">
-              {t.footer_support}
-            </a>
-            <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1">
-              <button
-                onClick={() => setLang("fr")}
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${lang === "fr" ? "bg-[#39ff14] text-black" : "text-gray-400 hover:text-white"}`}
-              >
-                FR
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${lang === "en" ? "bg-[#39ff14] text-black" : "text-gray-400 hover:text-white"}`}
-              >
-                EN
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar lang={lang} onLangChange={setLang} activePage="home" />
 
       {/* HERO */}
       <section className="pt-32 pb-24 px-6 text-center relative overflow-hidden">

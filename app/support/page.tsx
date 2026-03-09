@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Navbar } from "../components/Navbar"
 
 const legalTexts = {
   fr: {
@@ -659,43 +660,10 @@ export default function SupportPage() {
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-[#111111]">
-        <div className="mx-auto max-w-3xl px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="/" className="text-lg font-bold text-white hover:text-[#39ff14] transition-colors">
-              Ultra <span className="text-[#39ff14]">Sports Fans</span>
-            </a>
-            <span className="text-white/20">/</span>
-            <span className="text-sm text-gray-400">Support</span>
-          </div>
-          <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1">
-            <button
-              onClick={() => setLang("fr")}
-              className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all ${
-                lang === "fr"
-                  ? "bg-[#39ff14] text-black"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              FR
-            </button>
-            <button
-              onClick={() => setLang("en")}
-              className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all ${
-                lang === "en"
-                  ? "bg-[#39ff14] text-black"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </header>
+      <Navbar lang={lang} onLangChange={setLang} activePage="support" />
 
       {/* Hero */}
-      <div className="border-b border-white/10 bg-[#111111] py-12 px-6 text-center">
+      <div className="border-b border-white/10 bg-[#111111] pt-24 pb-12 px-6 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">{t.title}</h1>
         <p className="text-gray-400 text-sm">Ultra Sports Fans</p>
       </div>
