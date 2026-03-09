@@ -3,7 +3,7 @@
 interface NavbarProps {
   lang: "fr" | "en"
   onLangChange: (lang: "fr" | "en") => void
-  activePage?: "home" | "support"
+  activePage?: "home" | "support" | "privacy"
 }
 
 export function Navbar({ lang, onLangChange, activePage }: NavbarProps) {
@@ -17,12 +17,18 @@ export function Navbar({ lang, onLangChange, activePage }: NavbarProps) {
           <a
             href="/support"
             className={`text-sm font-medium transition-colors ${
-              activePage === "support"
-                ? "text-[#39ff14]"
-                : "text-gray-400 hover:text-white"
+              activePage === "support" ? "text-[#39ff14]" : "text-gray-400 hover:text-white"
             }`}
           >
             {lang === "fr" ? "Assistance" : "Assistance"}
+          </a>
+          <a
+            href="/privacy"
+            className={`text-sm font-medium transition-colors ${
+              activePage === "privacy" ? "text-[#39ff14]" : "text-gray-400 hover:text-white"
+            }`}
+          >
+            {lang === "fr" ? "Confidentialité" : "Privacy"}
           </a>
         </div>
         <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1">
