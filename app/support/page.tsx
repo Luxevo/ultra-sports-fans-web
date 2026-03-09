@@ -662,9 +662,12 @@ export default function SupportPage() {
       {/* Header */}
       <header className="border-b border-white/10 bg-[#111111]">
         <div className="mx-auto max-w-3xl px-6 py-4 flex items-center justify-between">
-          <div>
-            <span className="text-lg font-bold text-white">{t.subtitle}</span>
-            <span className="ml-2 text-sm text-[#39ff14]">Support</span>
+          <div className="flex items-center gap-3">
+            <a href="/" className="text-lg font-bold text-white hover:text-[#39ff14] transition-colors">
+              Ultra <span className="text-[#39ff14]">Sports Fans</span>
+            </a>
+            <span className="text-white/20">/</span>
+            <span className="text-sm text-gray-400">Support</span>
           </div>
           <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1">
             <button
