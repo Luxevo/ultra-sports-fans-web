@@ -1,103 +1,41 @@
 "use client"
 
 import { useState } from "react"
-import { Navbar } from "../components/Navbar"
+
 
 const privacy = {
   fr: {
     title: "Politique de confidentialité",
-    updated: "Date d'entrée en vigueur : 2026-02-11",
-    operator: "Exploité par : Prediction Expert Inc.",
-    contact: "Contact : contact@ultrasportsfans.com",
+    updated: "En vigueur depuis le 2026-02-11",
+    operator: "Prediction Expert Inc.",
     sections: [
-      {
-        title: "1. Introduction",
-        content: "La présente Politique de confidentialité explique comment Prediction Expert Inc. collecte, utilise et partage les informations via Ultra Sports Fans Live.\nEn utilisant le Service, vous consentez à la présente Politique."
-      },
-      {
-        title: "2. Informations que nous collectons",
-        content: "A. Informations que vous fournissez\nNous pouvons collecter :\n- Courriel, nom d'utilisateur, détails du compte\n- Date de naissance (vérification de l'âge)\n- Sélection de région ou juridiction\n- Messages de chat et contenu communautaire\n\nB. Données collectées automatiquement\nNous pouvons collecter :\n- Identifiants d'appareil\n- Adresse IP\n- Analyses d'utilisation de l'application\n- Rapports de plantage et diagnostics\n- Localisation approximative (au niveau régional)\n\nC. Données publicitaires et promotionnelles\nNous pouvons collecter :\n- Engagement et interactions publicitaires\n- Activité de liens affiliés\n- Signaux de ciblage régional"
-      },
-      {
-        title: "3. Comment nous utilisons les informations",
-        content: "Nous utilisons les informations pour :\n- Exploiter et améliorer le Service\n- Vérifier la conformité à l'âge légal\n- Fournir du contenu régional personnalisé\n- Modérer les chats et prévenir les abus\n- Diffuser de la publicité et des promotions ciblées\n- Analyser les tendances d'engagement et créer des moments forts communautaires\n- Protéger contre la fraude ou les activités illégales"
-      },
-      {
-        title: "4. Publicité et réseaux tiers",
-        content: "Le Service peut afficher des publicités ciblées ou des promotions régionales via des fournisseurs publicitaires tiers.\nLes tiers peuvent collecter ou traiter des données selon leurs propres politiques de confidentialité."
-      },
-      {
-        title: "5. Partage des informations",
-        content: "Nous pouvons partager des informations avec :\n- Les fournisseurs de services soutenant l'Application\n- Les partenaires publicitaires et analytiques\n- Les partenaires affiliés lorsque des offres sont consultées\n- Les autorités si la loi l'exige\nNous ne vendons pas sciemment des informations personnelles en tant que produit autonome."
-      },
-      {
-        title: "6. Conservation des données",
-        content: "Nous conservons les données uniquement aussi longtemps que nécessaire pour exploiter le Service, respecter les obligations légales et appliquer les politiques."
-      },
-      {
-        title: "7. Sécurité des données",
-        content: "Nous utilisons des mesures de protection raisonnables, mais aucun système n'est totalement sécurisé."
-      },
-      {
-        title: "8. Vos droits",
-        content: "Selon votre région, vous pouvez demander l'accès, la correction ou la suppression de vos données en contactant :\ncontact@ultrasportsfans.com"
-      },
-      {
-        title: "9. Confidentialité des enfants",
-        content: "Le Service n'est pas destiné aux personnes n'ayant pas atteint l'âge légal requis dans leur juridiction."
-      },
-      {
-        title: "10. Mises à jour",
-        content: "Nous pouvons mettre à jour la présente Politique de confidentialité à tout moment. L'utilisation continue signifie l'acceptation."
-      },
+      { title: "1. Introduction", content: "La présente Politique explique comment Prediction Expert Inc. collecte, utilise et partage les informations via Ultra Sports Fans Live.\nEn utilisant le Service, vous consentez à la présente Politique." },
+      { title: "2. Informations collectées", content: "A. Informations fournies\n- Courriel, nom d'utilisateur, détails du compte\n- Date de naissance (vérification de l'âge)\n- Sélection de région ou juridiction\n- Messages de chat et contenu communautaire\n\nB. Données automatiques\n- Identifiants d'appareil\n- Adresse IP\n- Analyses d'utilisation\n- Rapports de plantage et diagnostics\n- Localisation approximative (niveau régional)\n\nC. Données publicitaires\n- Engagement publicitaire\n- Activité de liens affiliés\n- Signaux de ciblage régional" },
+      { title: "3. Utilisation des informations", content: "Nous utilisons les informations pour :\n- Exploiter et améliorer le Service\n- Vérifier la conformité à l'âge légal\n- Fournir du contenu régional personnalisé\n- Modérer les chats et prévenir les abus\n- Diffuser de la publicité et des promotions ciblées\n- Protéger contre la fraude" },
+      { title: "4. Publicité et tiers", content: "Le Service peut afficher des publicités ciblées via des fournisseurs tiers.\nCes tiers peuvent collecter des données selon leurs propres politiques." },
+      { title: "5. Partage des informations", content: "Nous pouvons partager des informations avec :\n- Les fournisseurs de services soutenant l'Application\n- Les partenaires publicitaires et analytiques\n- Les partenaires affiliés\n- Les autorités si la loi l'exige\n\nNous ne vendons pas sciemment des informations personnelles." },
+      { title: "6. Conservation des données", content: "Nous conservons les données aussi longtemps que nécessaire pour exploiter le Service et respecter nos obligations légales." },
+      { title: "7. Sécurité", content: "Nous utilisons des mesures de protection raisonnables, mais aucun système n'est totalement sécurisé." },
+      { title: "8. Vos droits", content: "Selon votre région, vous pouvez demander l'accès, la correction ou la suppression de vos données :\ncontact@ultrasportsfans.com" },
+      { title: "9. Confidentialité des mineurs", content: "Le Service n'est pas destiné aux personnes n'ayant pas atteint l'âge légal requis dans leur juridiction." },
+      { title: "10. Mises à jour", content: "Nous pouvons mettre à jour cette Politique à tout moment. L'utilisation continue signifie l'acceptation." },
     ]
   },
   en: {
     title: "Privacy Policy",
     updated: "Effective Date: 2026-02-11",
-    operator: "Operated by: Prediction Expert Inc.",
-    contact: "Contact: contact@ultrasportsfans.com",
+    operator: "Prediction Expert Inc.",
     sections: [
-      {
-        title: "1. Introduction",
-        content: "This Privacy Policy explains how Prediction Expert Inc. collects, uses, and shares information through Ultra Sports Fans Live.\nBy using the Service, you consent to this Policy."
-      },
-      {
-        title: "2. Information We Collect",
-        content: "A. Information You Provide\nWe may collect:\n- Email, username, account details\n- Date of birth (age verification)\n- Region or jurisdiction selection\n- Chat messages and community content\n\nB. Automatically Collected Data\nWe may collect:\n- Device identifiers\n- IP address\n- App usage analytics\n- Crash reports and diagnostics\n- Approximate location (region-level)\n\nC. Advertising and Promotion Data\nWe may collect:\n- Ad engagement and interactions\n- Affiliate link activity\n- Region-based targeting signals"
-      },
-      {
-        title: "3. How We Use Information",
-        content: "We use information to:\n- Operate and improve the Service\n- Verify legal age compliance\n- Provide personalized regional content\n- Moderate chats and prevent abuse\n- Deliver targeted advertising and promotions\n- Analyze engagement trends and create community highlights\n- Protect against fraud or unlawful activity"
-      },
-      {
-        title: "4. Advertising and Third-Party Networks",
-        content: "The Service may display targeted advertisements or regional promotions through third-party ad providers.\nThird parties may collect or process data under their own privacy policies."
-      },
-      {
-        title: "5. Sharing of Information",
-        content: "We may share information with:\n- Service providers supporting the App\n- Advertising and analytics partners\n- Affiliate partners when offers are accessed\n- Authorities if legally required\nWe do not knowingly sell personal information as a standalone product."
-      },
-      {
-        title: "6. Data Retention",
-        content: "We retain data only as long as necessary to operate the Service, comply with legal obligations, and enforce policies."
-      },
-      {
-        title: "7. Data Security",
-        content: "We use reasonable safeguards, but no system is completely secure."
-      },
-      {
-        title: "8. Your Rights",
-        content: "Depending on your region, you may request access, correction, or deletion of your data by contacting:\ncontact@ultrasportsfans.com"
-      },
-      {
-        title: "9. Children's Privacy",
-        content: "The Service is not intended for individuals below the legal age requirement in their jurisdiction."
-      },
-      {
-        title: "10. Updates",
-        content: "We may update this Privacy Policy at any time. Continued use means acceptance."
-      },
+      { title: "1. Introduction", content: "This Privacy Policy explains how Prediction Expert Inc. collects, uses, and shares information through Ultra Sports Fans Live.\nBy using the Service, you consent to this Policy." },
+      { title: "2. Information We Collect", content: "A. Information You Provide\n- Email, username, account details\n- Date of birth (age verification)\n- Region or jurisdiction selection\n- Chat messages and community content\n\nB. Automatically Collected Data\n- Device identifiers\n- IP address\n- App usage analytics\n- Crash reports and diagnostics\n- Approximate location (region-level)\n\nC. Advertising and Promotion Data\n- Ad engagement and interactions\n- Affiliate link activity\n- Region-based targeting signals" },
+      { title: "3. How We Use Information", content: "We use information to:\n- Operate and improve the Service\n- Verify legal age compliance\n- Provide personalized regional content\n- Moderate chats and prevent abuse\n- Deliver targeted advertising and promotions\n- Protect against fraud" },
+      { title: "4. Advertising and Third Parties", content: "The Service may display targeted ads through third-party providers.\nThird parties may collect data under their own privacy policies." },
+      { title: "5. Sharing of Information", content: "We may share information with:\n- Service providers supporting the App\n- Advertising and analytics partners\n- Affiliate partners\n- Authorities if legally required\n\nWe do not knowingly sell personal information." },
+      { title: "6. Data Retention", content: "We retain data only as long as necessary to operate the Service and comply with legal obligations." },
+      { title: "7. Security", content: "We use reasonable safeguards, but no system is completely secure." },
+      { title: "8. Your Rights", content: "Depending on your region, you may request access, correction, or deletion of your data:\ncontact@ultrasportsfans.com" },
+      { title: "9. Children's Privacy", content: "The Service is not intended for individuals below the legal age requirement in their jurisdiction." },
+      { title: "10. Updates", content: "We may update this Privacy Policy at any time. Continued use means acceptance." },
     ]
   }
 }
@@ -107,33 +45,63 @@ export default function PrivacyPage() {
   const t = privacy[lang]
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] text-white">
-      <Navbar lang={lang} onLangChange={setLang} />
+    <div className="min-h-screen" style={{ background: '#000', color: '#fff', fontFamily: 'var(--font-poppins), Poppins, sans-serif' }}>
 
-      <div className="pt-24 pb-12 px-6 border-b border-white/10 bg-[#111111] text-center">
-        <h1 className="text-3xl font-bold text-white mb-3">{t.title}</h1>
-        <p className="text-sm text-gray-500">{t.updated}</p>
-        <p className="text-sm text-gray-500">{t.operator}</p>
+      {/* Header */}
+      <div style={{ padding: '32px 24px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 720, margin: '0 auto', width: '100%' }}>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontSize: '0.85rem' }}>
+          ← Accueil
+        </a>
+        <div style={{ display: 'flex', gap: 4 }}>
+          {(["fr", "en"] as const).map((l) => (
+            <button key={l} onClick={() => setLang(l)} style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 10px', borderRadius: 6, border: 'none', cursor: 'pointer', background: lang === l ? 'rgba(255,255,255,0.12)' : 'transparent', color: lang === l ? '#fff' : 'rgba(255,255,255,0.3)' }}>
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <main className="mx-auto max-w-3xl px-6 py-12 space-y-8">
+      <div className="pt-14 pb-14 px-6 text-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <h1 style={{ fontFamily: 'var(--font-poppins), Poppins, sans-serif', fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700 }}>
+          {t.title}
+        </h1>
+        <p className="mt-3" style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>{t.updated} · {t.operator}</p>
+      </div>
+
+      <main style={{ maxWidth: 720, margin: '0 auto', width: '100%', padding: '64px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         {t.sections.map((section, i) => (
-          <div key={i} className="rounded-xl border border-white/10 bg-[#111111] p-6">
-            <h2 className="text-base font-bold text-[#39ff14] mb-3">{section.title}</h2>
-            <p className="text-sm text-gray-400 leading-relaxed whitespace-pre-line">{section.content}</p>
+          <div
+            key={i}
+            style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: '28px 32px' }}
+          >
+            <h2 className="font-bold mb-3" style={{ fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)' }}>
+              {section.title}
+            </h2>
+            <p style={{ color: 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-line' }}>
+              {section.content}
+            </p>
           </div>
         ))}
 
-        <div className="rounded-xl border border-white/10 bg-[#111111] p-6 text-center">
-          <p className="text-sm text-gray-400">{t.contact}</p>
-          <a href="mailto:contact@ultrasportsfans.com" className="text-[#39ff14] text-sm hover:underline">
+        <div
+          className="rounded-xl p-6 text-center"
+          style={{ background: 'rgba(0,200,255,0.04)', border: '1px solid rgba(0,200,255,0.15)' }}
+        >
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: '8px' }}>
+            Contact
+          </p>
+          <a
+            href="mailto:contact@ultrasportsfans.com"
+            className="font-semibold hover:underline"
+            style={{ color: 'var(--accent)', fontSize: '0.9rem' }}
+          >
             contact@ultrasportsfans.com
           </a>
         </div>
       </main>
 
-      <footer className="border-t border-white/10 py-6 text-center">
-        <p className="text-xs text-gray-600">© 2025 Ultra Sports Fans — Prediction Expert Inc.</p>
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '24px', textAlign: 'center' }}>
+        <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem' }}>© 2025 Ultra Sports Fans — Prediction Expert Inc.</p>
       </footer>
     </div>
   )
