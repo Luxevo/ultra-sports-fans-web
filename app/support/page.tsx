@@ -18,7 +18,7 @@ const content = {
           { q: "Puis-je utiliser l'app sans compte ?", a: "Oui. Tu peux consulter les matchs et les équipes en mode visiteur. Pour le chat et les favoris, un compte est requis." },
           { q: "Comment réinitialiser mon mot de passe ?", a: "Sur la page de connexion, appuie sur \"Mot de passe oublié\". Tu recevras un lien par email. Assure-toi que l'app est installée avant de cliquer." },
           { q: "Comment supprimer mon compte ?", a: "Va dans ton Profil → Supprimer le compte. Cette action est irréversible et supprime toutes tes données." },
-          { q: "Mon compte a été suspendu. Pourquoi ?", a: "Les comptes sont suspendus suite à une violation des conditions (contenu inapproprié, harcèlement, spam). Pour contester : contact@ultrasportsfans.com." },
+          { q: "Mon compte a été suspendu. Pourquoi ?", a: "Les comptes sont suspendus suite à une violation des conditions (contenu inapproprié, harcèlement, spam). Pour contester, utilise le formulaire de contact." },
         ]
       },
       {
@@ -86,7 +86,7 @@ const content = {
           { q: "Can I use the app without an account?", a: "Yes. You can browse matches and teams as a visitor. Chat and favorites require an account." },
           { q: "How do I reset my password?", a: "On the login screen, tap \"Forgot Password\". You'll receive a link by email. Make sure the app is installed before clicking." },
           { q: "How do I delete my account?", a: "Go to your Profile → Delete Account. This action is irreversible and removes all your data." },
-          { q: "My account was suspended. Why?", a: "Accounts are suspended for violating our terms (inappropriate content, harassment, spam). To appeal: contact@ultrasportsfans.com." },
+          { q: "My account was suspended. Why?", a: "Accounts are suspended for violating our terms (inappropriate content, harassment, spam). To appeal, use the contact form." },
         ]
       },
       {
@@ -225,10 +225,9 @@ export default function SupportPage() {
           <p className="mb-4" style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>{t.contactDesc}</p>
           <a
             href={`mailto:${t.contactEmail}`}
-            className="font-semibold hover:underline"
-            style={{ color: 'var(--accent)', fontSize: '0.9rem' }}
+            style={{ display: 'inline-block', marginTop: 4, marginBottom: 8, padding: '10px 28px', borderRadius: 10, background: 'var(--accent)', color: '#000', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none' }}
           >
-            {t.contactEmail}
+            {lang === "fr" ? "Nous contacter" : "Contact us"}
           </a>
         </div>
       </main>

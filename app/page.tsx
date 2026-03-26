@@ -276,7 +276,7 @@ export default function Home() {
           <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
             <a href="/support" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>{t.footer.support}</a>
             <a href="/privacy" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>{t.footer.privacy}</a>
-            <a href="mailto:contact@ultrasportsfans.com" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>contact@ultrasportsfans.com</a>
+            <a href="mailto:contact@ultrasportsfans.com" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>{lang === "fr" ? "Nous contacter" : "Contact us"}</a>
           </div>
         </div>
         <p style={{ textAlign: 'center', fontSize: '0.65rem', color: 'rgba(255,255,255,0.15)', marginTop: 12, maxWidth: 900, margin: '12px auto 0' }}>

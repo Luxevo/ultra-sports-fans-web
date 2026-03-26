@@ -16,7 +16,7 @@ const privacy = {
       { title: "5. Partage des informations", content: "Nous pouvons partager des informations avec :\n- Les fournisseurs de services soutenant l'Application\n- Les partenaires publicitaires et analytiques\n- Les partenaires affiliés\n- Les autorités si la loi l'exige\n\nNous ne vendons pas sciemment des informations personnelles." },
       { title: "6. Conservation des données", content: "Nous conservons les données aussi longtemps que nécessaire pour exploiter le Service et respecter nos obligations légales." },
       { title: "7. Sécurité", content: "Nous utilisons des mesures de protection raisonnables, mais aucun système n'est totalement sécurisé." },
-      { title: "8. Vos droits", content: "Selon votre région, vous pouvez demander l'accès, la correction ou la suppression de vos données :\ncontact@ultrasportsfans.com" },
+      { title: "8. Vos droits", content: "Selon votre région, vous pouvez demander l'accès, la correction ou la suppression de vos données via notre formulaire de contact." },
       { title: "9. Confidentialité des mineurs", content: "Le Service n'est pas destiné aux personnes n'ayant pas atteint l'âge légal requis dans leur juridiction." },
       { title: "10. Mises à jour", content: "Nous pouvons mettre à jour cette Politique à tout moment. L'utilisation continue signifie l'acceptation." },
     ]
@@ -33,7 +33,7 @@ const privacy = {
       { title: "5. Sharing of Information", content: "We may share information with:\n- Service providers supporting the App\n- Advertising and analytics partners\n- Affiliate partners\n- Authorities if legally required\n\nWe do not knowingly sell personal information." },
       { title: "6. Data Retention", content: "We retain data only as long as necessary to operate the Service and comply with legal obligations." },
       { title: "7. Security", content: "We use reasonable safeguards, but no system is completely secure." },
-      { title: "8. Your Rights", content: "Depending on your region, you may request access, correction, or deletion of your data:\ncontact@ultrasportsfans.com" },
+      { title: "8. Your Rights", content: "Depending on your region, you may request access, correction, or deletion of your data via our contact form." },
       { title: "9. Children's Privacy", content: "The Service is not intended for individuals below the legal age requirement in their jurisdiction." },
       { title: "10. Updates", content: "We may update this Privacy Policy at any time. Continued use means acceptance." },
     ]
@@ -92,10 +92,9 @@ export default function PrivacyPage() {
           </p>
           <a
             href="mailto:contact@ultrasportsfans.com"
-            className="font-semibold hover:underline"
-            style={{ color: 'var(--accent)', fontSize: '0.9rem' }}
+            style={{ display: 'inline-block', marginTop: 4, marginBottom: 8, padding: '10px 28px', borderRadius: 10, background: 'var(--accent)', color: '#000', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none' }}
           >
-            contact@ultrasportsfans.com
+            {lang === "fr" ? "Nous contacter" : "Contact us"}
           </a>
         </div>
       </main>

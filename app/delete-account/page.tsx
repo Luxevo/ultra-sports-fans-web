@@ -45,7 +45,7 @@ export default function DeleteAccount() {
           className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-xl transition-all hover:opacity-80"
           style={{ background: 'rgba(0,200,255,0.1)', border: '1px solid rgba(0,200,255,0.25)', color: 'var(--accent)', fontSize: '0.9rem' }}
         >
-          contact@ultrasportsfans.com
+          Nous contacter
         </a>
       </div>
     </div>
