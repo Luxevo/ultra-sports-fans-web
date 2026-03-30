@@ -32,7 +32,7 @@ const translations = {
     strip: [
       { plain: "Chat en direct. Chaque sport.", accent: "Chaque match." },
       { plain: "Personnalise ton profil.", accent: "Représente ton équipe." },
-      { plain: "Change de langue.", accent: "Chatte à ta façon." },
+      { plain: "Change de langue.", accent: "Chat à ta façon." },
     ],
     footer: {
       copy: "© 2026 Ultra Sports Fans",
