@@ -1,5 +1,7 @@
 export const revalidate = 0
 
+import { UserDropdown } from './UserDropdown'
+
 async function getStats() {
   const url = process.env.SUPABASE_URL
   const key = process.env.SUPABASE_ANON_KEY
@@ -13,7 +15,7 @@ async function getStats() {
 
   const [r30min, rToday, rReports] = await Promise.all([
     fetch(`${url}/rest/v1/chat_messages?select=user_id,username&created_at=gte.${minus30min}`, { headers, cache: 'no-store' }),
-    fetch(`${url}/rest/v1/chat_messages?select=user_id,username&created_at=gte.${startOfDay.toISOString()}`, { headers, cache: 'no-store' }),
+    fetch(`${url}/rest/v1/chat_messages?select=id,user_id,username,content,created_at&created_at=gte.${startOfDay.toISOString()}&order=created_at.asc`, { headers, cache: 'no-store' }),
     fetch(`${url}/rest/v1/reported_messages?select=message_id,reported_user_id,reporter_id,created_at&order=created_at.desc&limit=50`, { headers: adminHeaders, cache: 'no-store' }),
   ])
 
@@ -43,9 +45,10 @@ async function getStats() {
   const usersToday = [...new Map((dToday as any[]).map((m: any) => [m.user_id, m.username])).entries()]
 
   const messagesByUser = Object.entries(
-    (dToday as any[]).reduce((acc: Record<string, { username: string; count: number }>, m: any) => {
-      if (!acc[m.user_id]) acc[m.user_id] = { username: m.username, count: 0 }
+    (dToday as any[]).reduce((acc: Record<string, { username: string; count: number; messages: { id: string; content: string; created_at: string }[] }>, m: any) => {
+      if (!acc[m.user_id]) acc[m.user_id] = { username: m.username, count: 0, messages: [] }
       acc[m.user_id].count++
+      acc[m.user_id].messages.push({ id: m.id, content: m.content, created_at: m.created_at })
       return acc
     }, {})
   ).sort((a, b) => b[1].count - a[1].count)
@@ -94,12 +97,17 @@ export default async function Page() {
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '20px 24px' }}>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginBottom: 4 }}>Messages aujourd'hui</p>
             <p style={{ fontSize: 36, fontWeight: 700, color: '#00C8FF', marginBottom: 16 }}>{totalToday}</p>
-            {messagesByUser.map(([, { username, count }], i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: i === 0 ? '1px solid rgba(255,255,255,0.08)' : 'none', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)' }}>{username}</span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: count > totalToday * 0.3 ? '#ff6b6b' : 'rgba(255,255,255,0.5)' }}>{count} msgs</span>
-              </div>
-            ))}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 4 }}>
+              {messagesByUser.map(([, { username, count, messages }], i) => (
+                <UserDropdown
+                  key={i}
+                  username={username}
+                  count={count}
+                  isHeavy={count > totalToday * 0.3}
+                  messages={messages}
+                />
+              ))}
+            </div>
           </div>
           <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '20px 24px' }}>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginBottom: 4 }}>Messages signalés</p>
