@@ -12,8 +12,8 @@ async function getStats(fromDate: string, toDate: string) {
   const adminHeaders = { 'apikey': serviceKey!, 'Authorization': `Bearer ${serviceKey}` }
 
   const minus30min = new Date(Date.now() - 30 * 60 * 1000).toISOString()
-  const startOfDay = new Date(`${fromDate}T00:00:00`)
-  const endOfDay = new Date(`${toDate}T23:59:59`)
+  const startOfDay = new Date(`${fromDate}T00:00:00-04:00`)
+  const endOfDay = new Date(`${toDate}T23:59:59-04:00`)
 
   const [r30min, r30minTeam, rToday, rTodayTeam, rReports, rNewUsers] = await Promise.all([
     fetch(`${url}/rest/v1/chat_messages?select=user_id,username&created_at=gte.${minus30min}`, { headers, cache: 'no-store' }),
