@@ -15,14 +15,16 @@ async function getStats(fromDate: string, toDate: string) {
   const startOfDay = new Date(`${fromDate}T00:00:00`)
   const endOfDay = new Date(`${toDate}T23:59:59`)
 
-  const [r30min, rToday, rReports, rNewUsers] = await Promise.all([
+  const [r30min, r30minTeam, rToday, rTodayTeam, rReports, rNewUsers] = await Promise.all([
     fetch(`${url}/rest/v1/chat_messages?select=user_id,username&created_at=gte.${minus30min}`, { headers, cache: 'no-store' }),
-    fetch(`${url}/rest/v1/chat_messages?select=id,user_id,username,content,created_at&created_at=gte.${startOfDay.toISOString()}&created_at=lte.${endOfDay.toISOString()}&order=created_at.asc`, { headers, cache: 'no-store' }),
+    fetch(`${url}/rest/v1/nhl_team_chat_messages?select=user_id,username&created_at=gte.${minus30min}`, { headers, cache: 'no-store' }),
+    fetch(`${url}/rest/v1/chat_messages?select=id,user_id,username,content,created_at,match_id&created_at=gte.${startOfDay.toISOString()}&created_at=lte.${endOfDay.toISOString()}&order=created_at.asc`, { headers, cache: 'no-store' }),
+    fetch(`${url}/rest/v1/nhl_team_chat_messages?select=id,user_id,username,content,created_at,team_id&created_at=gte.${startOfDay.toISOString()}&created_at=lte.${endOfDay.toISOString()}&order=created_at.asc`, { headers, cache: 'no-store' }),
     fetch(`${url}/rest/v1/reported_messages?select=message_id,reported_user_id,reporter_id,created_at&order=created_at.desc&limit=50`, { headers: adminHeaders, cache: 'no-store' }),
     fetch(`${url}/rest/v1/profiles?select=id,username,created_at&created_at=gte.${startOfDay.toISOString()}&created_at=lte.${endOfDay.toISOString()}&order=created_at.desc`, { headers: adminHeaders, cache: 'no-store' }),
   ])
 
-  const [d30min, dToday, dReports, dNewUsers] = await Promise.all([r30min.json(), rToday.json(), rReports.json(), rNewUsers.json()])
+  const [d30min, d30minTeam, dToday, dTodayTeam, dReports, dNewUsers] = await Promise.all([r30min.json(), r30minTeam.json(), rToday.json(), rTodayTeam.json(), rReports.json(), rNewUsers.json()])
 
   const rawReports = Array.isArray(dReports) ? dReports : []
 
@@ -33,6 +35,14 @@ async function getStats(fromDate: string, toDate: string) {
   const messageContents: Record<string, { content: string; username: string }> = {}
   const reporterProfiles: Record<string, string> = {}
 
+  // Fetch match names for match chat
+  const matchIds = [...new Set((Array.isArray(dToday) ? dToday : []).map((m: any) => m.match_id).filter(Boolean))]
+  const matchNames: Record<string, string> = {}
+
+  // Fetch team names for team chat
+  const teamIds = [...new Set((Array.isArray(dTodayTeam) ? dTodayTeam : []).map((m: any) => m.team_id).filter(Boolean))]
+  const teamNames: Record<string, string> = {}
+
   await Promise.all([
     messageIds.length > 0
       ? fetch(`${url}/rest/v1/chat_messages?select=id,content,username&id=in.(${messageIds.join(',')})`, { headers: adminHeaders, cache: 'no-store' })
@@ -42,16 +52,59 @@ async function getStats(fromDate: string, toDate: string) {
       ? fetch(`${url}/rest/v1/profiles?select=id,username&id=in.(${reporterIds.join(',')})`, { headers: adminHeaders, cache: 'no-store' })
           .then(r => r.json()).then((d: any[]) => { if (Array.isArray(d)) for (const p of d) reporterProfiles[p.id] = p.username })
       : Promise.resolve(),
+    matchIds.length > 0
+      ? fetch(`${url}/rest/v1/matches_cache?select=id,away_team_abbr,home_team_abbr&id=in.(${matchIds.join(',')})`, { headers, cache: 'no-store' })
+          .then(r => r.json()).then((d: any[]) => { if (Array.isArray(d)) for (const m of d) matchNames[m.id] = `${m.away_team_abbr} vs ${m.home_team_abbr}` })
+      : Promise.resolve(),
+    teamIds.length > 0
+      ? fetch(`${url}/rest/v1/teams?select=goalserve_id,abbr&goalserve_id=in.(${teamIds.join(',')})`, { headers, cache: 'no-store' })
+          .then(r => r.json()).then((d: any[]) => { if (Array.isArray(d)) for (const t of d) teamNames[t.goalserve_id] = t.abbr })
+      : Promise.resolve(),
   ])
 
-  const activeUsers = [...new Map((d30min as any[]).map((m: any) => [m.user_id, m.username])).entries()]
-  const usersToday = [...new Map((dToday as any[]).map((m: any) => [m.user_id, m.username])).entries()]
+  const allActive = [...(Array.isArray(d30min) ? d30min : []), ...(Array.isArray(d30minTeam) ? d30minTeam : [])]
+  const allToday = [...(Array.isArray(dToday) ? dToday : []), ...(Array.isArray(dTodayTeam) ? dTodayTeam : [])]
 
-  const messagesByUser = Object.entries(
-    (dToday as any[]).reduce((acc: Record<string, { username: string; count: number; messages: { id: string; content: string; created_at: string }[] }>, m: any) => {
+  const activeUsers = [...new Map(allActive.map((m: any) => [m.user_id, m.username])).entries()]
+  const usersToday = [...new Map(allToday.map((m: any) => [m.user_id, m.username])).entries()]
+
+  const totalMatchMessages = Array.isArray(dToday) ? dToday.length : 0
+  const totalTeamMessages = Array.isArray(dTodayTeam) ? dTodayTeam.length : 0
+
+  const buildByUser = (data: any[], withMatchLabel = false) => Object.entries(
+    data.reduce((acc: Record<string, { username: string; count: number; messages: { id: string; content: string; created_at: string; matchLabel?: string }[] }>, m: any) => {
       if (!acc[m.user_id]) acc[m.user_id] = { username: m.username, count: 0, messages: [] }
       acc[m.user_id].count++
-      acc[m.user_id].messages.push({ id: m.id, content: m.content, created_at: m.created_at })
+      const matchLabel = m.matchLabel
+        || (withMatchLabel && m.match_id ? matchNames[m.match_id] || m.match_id : undefined)
+      acc[m.user_id].messages.push({ id: m.id, content: m.content, created_at: m.created_at, matchLabel })
+      return acc
+    }, {})
+  ).sort((a, b) => b[1].count - a[1].count)
+
+  // Group match chat by match
+  const matchData = Array.isArray(dToday) ? dToday : []
+  const byMatch = Object.entries(
+    matchData.reduce((acc: Record<string, { label: string; count: number }>, m: any) => {
+      const key = m.match_id || 'unknown'
+      if (!acc[key]) acc[key] = { label: matchNames[key] || key, count: 0 }
+      acc[key].count++
+      return acc
+    }, {})
+  ).sort((a, b) => b[1].count - a[1].count)
+
+  const matchMessagesByUser = buildByUser(matchData, true)
+  const teamData = Array.isArray(dTodayTeam) ? dTodayTeam : []
+  const teamMessagesByUser = buildByUser(teamData.map((m: any) => ({
+    ...m,
+    matchLabel: teamNames[m.team_id] || m.team_id,
+  })))
+
+  const byTeam = Object.entries(
+    teamData.reduce((acc: Record<string, { label: string; count: number }>, m: any) => {
+      const key = m.team_id || 'unknown'
+      if (!acc[key]) acc[key] = { label: teamNames[key] || key, count: 0 }
+      acc[key].count++
       return acc
     }, {})
   ).sort((a, b) => b[1].count - a[1].count)
@@ -59,8 +112,13 @@ async function getStats(fromDate: string, toDate: string) {
   return {
     activeUsers,
     usersToday,
-    messagesByUser,
-    totalToday: (dToday as any[]).length,
+    matchMessagesByUser,
+    teamMessagesByUser,
+    byMatch,
+    byTeam,
+    totalToday: allToday.length,
+    totalMatchMessages,
+    totalTeamMessages,
     reports: rawReports,
     messageContents,
     reporterProfiles,
@@ -71,7 +129,7 @@ async function getStats(fromDate: string, toDate: string) {
 export default async function Page({ searchParams }: { searchParams: Promise<{ from?: string; to?: string }> }) {
   const today = new Date().toISOString().slice(0, 10)
   const { from = today, to = today } = await searchParams
-  const { activeUsers, usersToday, messagesByUser, totalToday, reports, messageContents, reporterProfiles, newUsers } = await getStats(from, to)
+  const { activeUsers, usersToday, matchMessagesByUser, teamMessagesByUser, byMatch, byTeam, totalToday, totalMatchMessages, totalTeamMessages, reports, messageContents, reporterProfiles, newUsers } = await getStats(from, to)
 
   const card = { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '16px 20px' }
 
@@ -117,11 +175,42 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ f
       {/* Row 2 : Messages + Signalés */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div style={card}>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginBottom: 4 }}>Messages</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginBottom: 4 }}>Messages total</p>
           <p style={{ fontSize: 36, fontWeight: 700, color: '#00C8FF', marginBottom: 12 }}>{totalToday}</p>
+
+          {/* Chat matchs */}
+          <p style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.75)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Chat matchs — {totalMatchMessages}</p>
+          {byMatch.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+              {byMatch.map(([, { label, count }], i) => (
+                <span key={i} style={{ fontSize: 11, background: 'rgba(0,200,255,0.1)', border: '1px solid rgba(0,200,255,0.2)', borderRadius: 6, padding: '2px 8px', color: '#00C8FF' }}>
+                  {label} — {count}
+                </span>
+              ))}
+            </div>
+          )}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginBottom: 16 }}>
+            {matchMessagesByUser.length === 0 && <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', padding: '6px 0' }}>Aucun message</p>}
+            {matchMessagesByUser.map(([, { username, count, messages }], i) => (
+              <UserDropdown key={i} username={username} count={count} isHeavy={count > totalMatchMessages * 0.3} messages={messages} />
+            ))}
+          </div>
+
+          {/* Chat équipes */}
+          <p style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.75)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Chat équipes — {totalTeamMessages}</p>
+          {byTeam.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+              {byTeam.map(([, { label, count }], i) => (
+                <span key={i} style={{ fontSize: 11, background: 'rgba(0,255,136,0.1)', border: '1px solid rgba(0,255,136,0.2)', borderRadius: 6, padding: '2px 8px', color: '#00ff88' }}>
+                  {label} — {count}
+                </span>
+              ))}
+            </div>
+          )}
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            {messagesByUser.map(([, { username, count, messages }], i) => (
-              <UserDropdown key={i} username={username} count={count} isHeavy={count > totalToday * 0.3} messages={messages} />
+            {teamMessagesByUser.length === 0 && <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', padding: '6px 0' }}>Aucun message</p>}
+            {teamMessagesByUser.map(([, { username, count, messages }], i) => (
+              <UserDropdown key={i} username={username} count={count} isHeavy={count > totalTeamMessages * 0.3} messages={messages} />
             ))}
           </div>
         </div>

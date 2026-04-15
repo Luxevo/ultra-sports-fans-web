@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-type Message = { id: string; content: string; created_at: string }
+type Message = { id: string; content: string; created_at: string; matchLabel?: string }
 
 export function UserDropdown({
   username,
@@ -48,7 +48,12 @@ export function UserDropdown({
               <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', whiteSpace: 'nowrap', paddingTop: 2 }}>
                 {new Date(m.created_at).toLocaleTimeString('fr-CA', { timeZone: 'America/Toronto', hour: '2-digit', minute: '2-digit' })}
               </span>
-              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', fontStyle: 'italic' }}>"{m.content}"</span>
+              <div style={{ flex: 1 }}>
+                {m.matchLabel && (
+                  <span style={{ fontSize: 10, color: '#00ff88', marginRight: 6, opacity: 0.8 }}>[{m.matchLabel}]</span>
+                )}
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', fontStyle: 'italic' }}>"{m.content}"</span>
+              </div>
             </div>
           ))}
         </div>
