@@ -171,7 +171,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ f
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#00C8FF', margin: 0 }}>USF — Chat Monitor</h1>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', margin: '4px 0 0' }}>F5 pour rafraîchir</p>
         </div>
         <Suspense>
